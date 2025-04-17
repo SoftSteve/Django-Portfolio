@@ -17,6 +17,7 @@ media/
 venv/
 .env
 *.env
+folio/
 
 # VSCode or IDE stuff
 .vscode/
