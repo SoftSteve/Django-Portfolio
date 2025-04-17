@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'assets/css/index.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <a href="#" class="logo">ProjectVault</a>
+            <button id="menu-toggle" class="menu-toggle">&#9776;</button>
+            <ul class="nav-links">
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>  
+    </header>
+    <main>
+        <div class="img-container">
+            <img src="{% static 'assets/images/wheat-field.png' %}" alt="wheat-field" class="banner">
+            <img class="home-image" src="{%static 'assets/images/home-image.png'%}" alt="home-image">
+        </div>
+        <section class="about-container">
+            <div id="about-text">
+                <p></p>
+            </div>
+        
+            <div id="hidden-text" style="display: none;">
+                {{ about.body|escapejs }}
+            </div>
+        </section>
+        
+        <div class="btn-container">
+            <button onclick="window.location.href='{% url 'start' %}'" id="contact-btn" class="contact-btn">
+                Start  
+            </button>
+        </div>
+    </main> 
+    <footer class="foot-container">
+        <div class="foot-content">
+            <p>&copy; 2025 ProjectVault. Built with Django.</p>
+        </div>
+        <ul class="foot-links">
+            <li class="foot-item"><a href="/admin/">Admin</a></li>
+        </ul>
+    </footer>
+    <script src="{% static 'assets/javascript/index.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'assets/css/start.css' %}">
+</head>
+<body>
+  <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/examples/jsm/controls/OrbitControls": "https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js"
+        }
+      }
+    </script>
+    <script type="module" src="{% static 'assets/javascript/start.js'%}"></script>
+</body>
+</html>
