@@ -3,7 +3,7 @@ import { GLTFLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders
 
 // Scene 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 100);
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -84,15 +84,12 @@ const floorTexture = textureLoader.load('/static/assets/images/cobble-floor.jpg'
     texture_floor.wrapS = THREE.RepeatWrapping;
     texture_floor.wrapT = THREE.RepeatWrapping;
 });
-const floorGeometry = new THREE.PlaneGeometry(20, 20);
+const floorGeometry = new THREE.PlaneGeometry(100, 100);
 const floorMaterial = new THREE.MeshStandardMaterial({ map: floorTexture });
 const floor = new THREE.Mesh(floorGeometry, floorMaterial);
 floor.rotation.x = -Math.PI / 2;
 scene.add(floor);
 
-// Grid helper
-const gridHelper = new THREE.GridHelper(20, 20);
-scene.add(gridHelper);
 
 // Wall setup
 const brickTexture = textureLoader.load('/static/assets/images/brick_texture.jpg', function (texture) {
@@ -164,6 +161,7 @@ document.addEventListener('keyup', (e) => {
     if (e.key === 'a') move.left = false;
     if (e.key === 'd') move.right = false;
 });
+
 
 // Pointer lock 
 document.addEventListener('click', () => {
