@@ -31,12 +31,12 @@
             </div>
         
             <div id="hidden-text" style="display: none;">
-                {{ about.body|escapejs }}
+                {{ about.body|safe }}
             </div>
         </section>
         
         <div class="btn-container">
-            <button onclick="window.location.href='{% url 'projects' %}'" id="contact-btn" class="contact-btn">
+            <button onclick="window.location.href='{% url 'projects' %}';" id="contact-btn" class="contact-btn">
                 Start  
             </button>
         </div>
