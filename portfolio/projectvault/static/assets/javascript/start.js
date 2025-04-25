@@ -1,223 +1,207 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-// Scene 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 100);
+const mazeSize = 10;
+const cellSize = 2;
+const wallThickness = 0.1;
+const wallHeight = 2;
 
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+let scene, camera, renderer, group, orbitControls;
+let PI, PI90;
 
-const cameraHolder = new THREE.Object3D(); 
-const pitchObject = new THREE.Object3D();  
-pitchObject.add(camera);
-cameraHolder.add(pitchObject);
-scene.add(cameraHolder);
+let floorTexture, wallTexture, skyboxTexture;
 
-camera.position.set(0, 1.6, 0);
-cameraHolder.position.set(0, 0, 5); 
+const maze = [];
 
-//character
-const gltfLoader = new GLTFLoader();
-let knight; 
-let mixer;
+init();
 
-gltfLoader.load('/static/assets/images/knight.glb', function (gltf) {
-    knight = gltf.scene;
+function init() {
+    const container = document.getElementById('container');
+    if (!container) {
+        console.error('Container element not found!');
+        return;
+    }
 
-    knight.traverse(function (object) {
-        if (object.isMesh) {
-            object.castShadow = true;
-        }
-    });
+    PI = Math.PI;
+    PI90 = Math.PI / 2;
 
-    scene.add(knight);
-    knight.position.set(0,0,-7.5)
-    knight.rotation.y = Math.PI;
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(0, 12.5, 20);
 
-    mixer = new THREE.AnimationMixer(knight);
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    container.appendChild(renderer.domElement);
 
-    const animations = gltf.animations;
+    orbitControls = new OrbitControls(camera, renderer.domElement);
+    orbitControls.update();
 
-    const idleAnimation = animations.find(animation => animation.name ==='idle');
+    group = new THREE.Group();
 
-    const idleAction = mixer.clipAction(idleAnimation)
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.6);
+    hemiLight.position.set(0, 20, 0);
+    group.add(hemiLight);
 
-    idleAction.play();
-});
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    dirLight.castShadow = true;
+    dirLight.position.set(15, 5, -10);
+    dirLight.shadow.mapSize.width = 2048;
+    dirLight.shadow.mapSize.height = 2048;
+    dirLight.shadow.bias = 0.0001;
+    dirLight.shadow.camera.near = 1;
+    dirLight.shadow.camera.far = 1000;
+    group.add(dirLight);
 
-// Skybox 
-const loader = new THREE.CubeTextureLoader();
-const bg = loader.load([
-  '/static/assets/images/sunsetflat_lf.jpg', 
-  '/static/assets/images/sunsetflat_rt.jpg', 
-  '/static/assets/images/sunsetflat_up.jpg', 
-  '/static/assets/images/sunsetflat_dn.jpg', 
-  '/static/assets/images/sunsetflat_ft.jpg', 
-  '/static/assets/images/sunsetflat_bk.jpg'  
-]);
-scene.background = bg;
+    scene.add(group);
 
-// Lighting 
-const sunsetLight = new THREE.DirectionalLight(0xffaa33, 2);
-sunsetLight.position.set(2, 4, -20);
-sunsetLight.target.position.set(0, 5, 0);
-sunsetLight.castShadow = true;
-scene.add(sunsetLight);
-scene.add(sunsetLight.target);
+    const manager = new THREE.LoadingManager();
+    manager.onLoad = () => {
+        loadFloor();
+        loadBackground();
+        generateMaze(mazeSize, mazeSize);
+        renderer.setAnimationLoop(animate);
+    };
 
-const light = new THREE.DirectionalLight(0xcc4400, .4); 
-light.position.set(0, 20, 15);  
-light.target.position.set(-2, 15, 0); 
-light.castShadow = true;
-scene.add(light);
+    const floorLoader = new THREE.TextureLoader(manager);
+    floorTexture = floorLoader.load('/static/assets/images/cobble-floor.jpg');
+    floorTexture.wrapS = THREE.RepeatWrapping;
+    floorTexture.wrapT = THREE.RepeatWrapping;
 
-const ambientLight = new THREE.AmbientLight(0x404040, 4); 
-ambientLight.position.set(-2,4,-10)
-scene.add(ambientLight);
+    const wallLoader = new THREE.TextureLoader(manager);
+    wallTexture = wallLoader.load('/static/assets/images/brick_texture.jpg');
+    wallTexture.wrapS = THREE.RepeatWrapping;
+    wallTexture.wrapT = THREE.RepeatWrapping;
+    wallTexture.repeat.set(0.5, 0.5);
 
-// Floor 
-const textureLoader = new THREE.TextureLoader();
-const floorTexture = textureLoader.load('/static/assets/images/cobble-floor.jpg', function (texture_floor) {
-    texture_floor.repeat.set(25, 25);
-    texture_floor.wrapS = THREE.RepeatWrapping;
-    texture_floor.wrapT = THREE.RepeatWrapping;
-});
-const floorGeometry = new THREE.PlaneGeometry(100, 100);
-const floorMaterial = new THREE.MeshStandardMaterial({ map: floorTexture });
-const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-floor.rotation.x = -Math.PI / 2;
-scene.add(floor);
-
-
-// Wall setup
-const brickTexture = textureLoader.load('/static/assets/images/brick_texture.jpg', function (texture) {
-    texture.repeat.set(9, 2); 
-    texture.wrapS = THREE.RepeatWrapping;  
-    texture.wrapT = THREE.RepeatWrapping;
-});
-const wallMaterial = new THREE.MeshStandardMaterial({
-    map: brickTexture,
-    roughness: 1, 
-    metalness: 0.2
-});
-const wallGeometry = new THREE.BoxGeometry(0.2, 3, 15);
-const wallPositions = [
-    { x: -2, z: 0 },
-    { x: 2, z: 0 },
-];
-
-const walls = [];
-wallPositions.forEach(pos => {
-    const wall = new THREE.Mesh(wallGeometry, wallMaterial);
-    wall.position.set(pos.x, 1, pos.z);
-    scene.add(wall);
-    walls.push(wall);
-});
-
-// Lantern setup
-const lanternGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.3, 16);
-const lanternMaterial = new THREE.MeshStandardMaterial({ color: 0x222222 });
-const lantern = new THREE.Mesh(lanternGeometry, lanternMaterial);
-const lantern1 = new THREE.Mesh(lanternGeometry, lanternMaterial);
-lantern1.position.set(1.9, 2, 0);
-lantern.position.set(-1.9, 2, 0); 
-scene.add(lantern1);
-scene.add(lantern);
-
-const fireLight = new THREE.PointLight(0xffaa33, 1 , 20);
-fireLight.position.set(-1, 2, 0);
-scene.add(fireLight);
-
-const fireLight1 = new THREE.PointLight(0xffaa33, 1, 20);
-fireLight1.position.set(1, 2, 0);
-scene.add(fireLight1);
-
-function flicker() {
-    fireLight.intensity = 1 + Math.random() * 0.4;
-    fireLight1.intensity = 1 + Math.random() * 0.4;
-    requestAnimationFrame(flicker);
+    const cubeLoader = new THREE.CubeTextureLoader(manager);
+    skyboxTexture = cubeLoader.load([
+        '/static/assets/images/sunsetflat_rt.jpg', 
+        '/static/assets/images/sunsetflat_lf.jpg', 
+        '/static/assets/images/sunsetflat_up.jpg',
+        '/static/assets/images/sunsetflat_dn.jpg', 
+        '/static/assets/images/sunsetflat_ft.jpg', 
+        '/static/assets/images/sunsetflat_bk.jpg', 
+    ]);
 }
-flicker();
 
-// Movement 
-const move = {
-    forward: false,
-    backward: false,
-    left: false,
-    right: false
-};
+function loadFloor() {
+    const size = mazeSize * cellSize;
+    const repeats = mazeSize * 2;
+    floorTexture.repeat.set(repeats, repeats);
 
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'w') move.forward = true;
-    if (e.key === 's') move.backward = true;
-    if (e.key === 'a') move.left = true;
-    if (e.key === 'd') move.right = true;
-});
-document.addEventListener('keyup', (e) => {
-    if (e.key === 'w') move.forward = false;
-    if (e.key === 's') move.backward = false;
-    if (e.key === 'a') move.left = false;
-    if (e.key === 'd') move.right = false;
-});
+    const mat = new THREE.MeshStandardMaterial({ map: floorTexture, side: THREE.DoubleSide, roughness: 1 });
+    const geo = new THREE.PlaneGeometry(size, size);
+    const floor = new THREE.Mesh(geo, mat);
+    floor.rotation.x = -PI90;
+    floor.receiveShadow = true;
+    group.add(floor);
+}
+
+function loadBackground() {
+    const cubeLoader = new THREE.CubeTextureLoader();
+    skyboxTexture = cubeLoader.load([
+        '/static/assets/images/sunsetflat_lf.jpg',
+        '/static/assets/images/sunsetflat_rt.jpg',
+        '/static/assets/images/sunsetflat_up.jpg',
+        '/static/assets/images/sunsetflat_dn.jpg',
+        '/static/assets/images/sunsetflat_ft.jpg',
+        '/static/assets/images/sunsetflat_bk.jpg',
+    ]);
+    
+    scene.background = skyboxTexture;  
+}
 
 
-// Pointer lock 
-document.addEventListener('click', () => {
-    renderer.domElement.requestPointerLock();
-});
-
-document.addEventListener('mousemove', (e) => {
-    if (document.pointerLockElement === renderer.domElement) {
-        cameraHolder.rotation.y -= e.movementX * 0.002;
-        pitchObject.rotation.x -= e.movementY * 0.002;
-        const maxPitch = Math.PI / 3;
-        const minPitch = -Math.PI / 3.25;
-        pitchObject.rotation.x = Math.max(minPitch, Math.min(maxPitch, pitchObject.rotation.x));
-    }
-});
-
-// Collision detection
-function checkCollision(playerBox) {
-    for (const wall of walls) {
-        const wallBox = new THREE.Box3().setFromObject(wall);
-        if (playerBox.intersectsBox(wallBox)) {
-            return true;
+function generateMaze(rows, cols) {
+    for (let y = 0; y < rows; y++) {
+        maze[y] = [];
+        for (let x = 0; x < cols; x++) {
+            maze[y][x] = { x, y, visited: false, walls: { top: true, right: true, bottom: true, left: true } };
         }
     }
-    return false;
+    carvePath(0, 0);
+
+
+    for (let x = 0; x < cols; x++) {
+        maze[0][x].walls.top = true;           
+        maze[rows - 1][x].walls.bottom = true;  
+    }
+    for (let y = 0; y < rows; y++) {
+        maze[y][0].walls.left = true;            
+        maze[y][cols - 1].walls.right = true;
+    }
+    
+    maze[0][0].walls.top = false;
+    maze[rows - 1][cols - 1].walls.bottom = false;
+
+    renderMaze();
+}
+
+function carvePath(x, y) {
+    maze[y][x].visited = true;
+    const dirs = shuffle(['top', 'right', 'bottom', 'left']);
+    for (const dir of dirs) {
+        let nx = x, ny = y;
+        if (dir === 'top') ny--;
+        if (dir === 'right') nx++;
+        if (dir === 'bottom') ny++;
+        if (dir === 'left') nx--;
+        if (
+            ny >= 0 && ny < mazeSize &&
+            nx >= 0 && nx < mazeSize &&
+            !maze[ny][nx].visited
+        ) {
+            maze[y][x].walls[dir] = false;
+            maze[ny][nx].walls[opposite(dir)] = false;
+            carvePath(nx, ny);
+        }
+    }
+}
+
+function renderMaze() {
+    for (const row of maze) {
+        for (const cell of row) {
+            const cx = cell.x * cellSize - (mazeSize * cellSize) / 2 + cellSize / 2;
+            const cz = cell.y * cellSize - (mazeSize * cellSize) / 2 + cellSize / 2;
+            if (cell.walls.top)    createWall(cx, cz - cellSize / 2, 0, true, true);
+            if (cell.walls.bottom) createWall(cx, cz + cellSize / 2, 0, true, true);
+            if (cell.walls.left)   createWall(cx - cellSize / 2, cz, PI90, true, true);
+            if (cell.walls.right)  createWall(cx + cellSize / 2, cz, PI90, true, true);
+        }
+    }
+}
+
+function createWall(x, z, rotationY = 0, receive = true, cast = true) {
+    const geo = new THREE.BoxGeometry(wallThickness, wallHeight, cellSize);
+    const mat = new THREE.MeshPhongMaterial({ map: wallTexture, side: THREE.DoubleSide, shininess: 50 });
+    const wall = new THREE.Mesh(geo, mat);
+
+    wall.castShadow = cast;
+    wall.receiveShadow = receive;
+
+    wall.position.set(x, wallHeight / 2, z);
+    wall.rotation.y = rotationY;
+
+    group.add(wall);
+}
+
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+function opposite(dir) {
+    return { top: 'bottom', bottom: 'top', left: 'right', right: 'left' }[dir];
 }
 
 function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-
-    if (mixer) {
-        mixer.update(0.01);
-    }
-
-    const speed = 0.1;
-    const direction = new THREE.Vector3();
-    if (move.forward) direction.z -= 1;
-    if (move.backward) direction.z += 1;
-    if (move.left) direction.x -= 1;
-    if (move.right) direction.x += 1;
-    direction.normalize();
-
-    const moveVector = new THREE.Vector3(direction.x, 0, direction.z);
-    moveVector.applyAxisAngle(new THREE.Vector3(0, 1, 0), cameraHolder.rotation.y);
-
-    const playerBox = new THREE.Box3().setFromObject(cameraHolder);
-    const collisionVector = moveVector.clone().multiplyScalar(speed);
-    const nextPosition = cameraHolder.position.clone().add(collisionVector);
-    const nextPlayerBox = new THREE.Box3().setFromCenterAndSize(nextPosition, new THREE.Vector3(.3, 2, .1));
-
-    if (!checkCollision(nextPlayerBox)) {
-        cameraHolder.position.add(collisionVector);
-    }
-
+    orbitControls.update();
     renderer.render(scene, camera);
 }
-animate();
-

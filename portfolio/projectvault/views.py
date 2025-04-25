@@ -10,7 +10,7 @@ def index(request):
 def start(request):
     return render(request, 'start.html')
 
-def test(request):
+def projects(request):
     project = Project.objects.first()
     return render(request, "project.html", {'project': project})
 
