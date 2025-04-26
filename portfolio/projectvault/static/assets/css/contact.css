@@ -1,0 +1,65 @@
+.main-container {
+    font-family: 'Poppins';
+    background: #333;
+    color: white;
+    margin: 0 auto;
+    width: 100vw;
+    min-height: 100vh;
+}
+
+.title {
+    font-weight: lighter;
+}
+
+.title, .description {
+    padding: 0 40px;
+}
+
+.description {
+    font-size: 14px;
+    color: gray;
+}
+
+.contact-container {
+    display: block;
+    background-color: rgba(161, 160, 160, 0.2);
+    border: solid 1px gray;
+    border-radius: 9px;
+    width: 40%;
+    margin: 80px auto 0 auto;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    padding: 0 40px;
+    min-height: 50vh;
+}
+
+input, textarea{
+    font-family: 'Poppins';
+    margin: 10px;
+    border-radius: 9px;
+    padding: 5px;
+    padding-left: 10px;
+}
+
+input {
+    min-height: 25px;
+    font-size: 16px;
+}
+
+textarea {
+    min-height: 100px;
+    font-size: 16px;
+    min-width: calc(100% - 40px);
+}
+
+.submit-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#submit-btn {
+    width: 20%;
+}

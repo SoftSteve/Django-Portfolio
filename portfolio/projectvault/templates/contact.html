@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'assets/css/contact.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+{% endblock %} 
+
+{% block content %}
+    <section class="main-container">
+        <div class="contact-container">
+            <h2 class="title">Contact</h2>
+            <p class="description">
+                Contact me to discuss career opportunities, questions about a project, or to discuss ideas!
+            </p>
+            <form class="contact-form" action="/email-form/">
+                <input id="user_name" type="text" name="user_name" required placeholder="Your name*">
+
+                <input id="email" type="text", name="email" required placeholder="Email*">
+
+                <textarea type="text" name="message" id="message" required placeholder="Your message*"></textarea>
+                
+                <div class="submit-container">
+                    <input id="submit-btn" type="submit" value="submit">
+                </div>
+                
+            </form>
+        </div>
+    </section>
+{% endblock %}

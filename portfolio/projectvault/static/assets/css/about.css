@@ -1,0 +1,28 @@
+.main-container {
+    box-sizing: border-box;
+    background: #333;
+    color: white;
+    width: 100vw;
+    min-height: 100vh;
+    padding-bottom: 100px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.about-logo {
+    display: block;
+    margin: 40px auto 0 auto;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
+.about-text {
+    font-size: 20px;
+    line-height: 4ch;
+    text-indent: 4ch;
+    font-family: 'Poppins';
+    width: 80%;
+    margin: 40px auto 0 auto;
+    padding: 20;
+}

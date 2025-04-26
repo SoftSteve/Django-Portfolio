@@ -19,3 +19,9 @@ def project_detail(request, slug):
     content_blocks = project.content_blocks.all()
     return render(request, 'project_detail.html', {'project': project, 'content_blocks':content_blocks})
 
+def about(request):
+    about = AboutSection.objects.last()
+    return render(request,'about.html', {'about': about})
+
+def contact(request):
+    return render(request, 'contact.html')
