@@ -11,6 +11,8 @@ class AboutSection(models.Model):
 class Project(models.Model):
     title = models.CharField(max_length=250)
     slug = models.SlugField(unique=True, blank=True)
+    description = models.TextField(blank=True)
+    image = models.ImageField(upload_to='static/assets/images', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):

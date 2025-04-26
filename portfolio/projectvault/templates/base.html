@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Site{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'assets/css/index.css' %}">
+    {% block head %} {% endblock %}
+    <script src="{% static 'assets/javascript/index.js' %}" defer></script>
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <a href="{% url 'index' %}" class="logo">ProjectVault</a>
+            <button id="menu-toggle" class="menu-toggle">&#9776;</button>
+            <ul class="nav-links">
+                <li><a href="{% url 'projects' %}">Projects</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>  
+    </header>
+
+    <main>
+        {% block content %}
+
+        {% endblock %}
+    </main>
+
+    <footer class="foot-container">
+        <div class="foot-content">
+            <p>&copy; 2025 ProjectVault. Built with Django.</p>
+        </div>
+        <ul class="foot-links">
+            <li class="foot-item"><a href="/admin/">Admin</a></li>
+        </ul>
+    </footer>
+    
+</body>
+</html>

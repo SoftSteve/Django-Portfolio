@@ -161,6 +161,7 @@ nav {
 
 .contact-btn {
     margin-top: 1.5%;
+    margin-bottom: 5%;
     width: 12%;
     padding: 11px;
     font-size: 18px;
@@ -212,7 +213,6 @@ nav {
     align-items: center;
     padding-right: 5%;
     padding-left: 5%;
-    margin-top: 5%;
     background: var(--primary-color);
     color: var(--text-color);
 }
@@ -283,11 +283,12 @@ nav {
     }
 
     #about-text {
-        height: 725px;
+        height: 675px;
+        margin-bottom: 2%;
     }
     
     .contact-btn {
-        margin-bottom: 1%;
+        margin-bottom: 5%;
         display: flex;
         width: 30%;
         height: 40px;

@@ -1,20 +1,32 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects</title>
-</head>
-<body>
-    <h1>Projects</h1>
-<ul>
-    {% for project in projects %}
-        <li>
-            <a href="{% url 'project_detail' slug=project.slug %}">{{ project.title }}</a>
-        </li>
-    {% endfor %}
-</ul>
+<title>
+    {% block title %}
+    Projects
+    {% endblock %}
+</title>
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'assets/css/projects.css' %}">
+{% endblock %}
+
+
+{% block content %}
+    <section class="main-container">
+        <h1 class="heading">Projects</h1>
+        <p class="heading-description">Browse through the available projects to view their descriptions, technologies used, and other relevant information. </p>
+        <ul class="project-list">
+            {% for project in projects %}
+                <li class="project-item">
+                    <a class="project-link" href="{% url 'project_detail' slug=project.slug %}">{{ project.title }}</a>
+                    <p class="project-description">{{ project.description }}</p>
+                    {% if project.image %}
+                        <img class="project-image" src="{{ project.image.url }}" alt="{{ project.title }}">
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
     
-</body>
-</html>
+   
+{% endblock %}
