@@ -1,6 +1,6 @@
 .main-container {
     background-color: #333;
-    color: #ede9dd;
+    color: white;
     font-family: 'Poppins';
     padding-bottom: 100px;
 }
@@ -36,13 +36,14 @@
 }
 
 .content-header {
-    font-weight: 200;
+    font-weight: 300;
 }
 
 .content-text {
     text-indent: 4ch;
     line-height: 4ch;
     font-size: 18px;
+    font-weight: 200;
 }
 
 .content-image {
