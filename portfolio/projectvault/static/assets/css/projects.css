@@ -7,6 +7,7 @@
     background: #333;
     color: white;
     box-sizing: border-box;
+    overflow-x: hidden;
 }
 .heading {
     font-size: 30px;
@@ -45,22 +46,38 @@
     padding: 10px;
     min-width: 250px;
     max-width: calc(33.333% - 10px);
+    transition: box-shadow 0.3s ease, border 0.3s ease;
+}
+
+.project-item:hover {
+    box-shadow: 5px 5px 5px black;
+    border: solid 1px white;
 }
 
 .project-link{
-    font-size: 24px;
-    font-weight: 200;
+    display: block;
+    height: 100%;
+    width: 100%;
     text-decoration: none;
-    color: white;
+    color: inherit;
     transition: color 0.3 ease;
 }
 
-.project-link:hover{
+.project-link:hover {
     color: #6d878c;
 }
 
+.project-content {
+    height: 100%;
+    width: 100%;
+}
+
+.project-title {
+    font-weight: 200;
+}
+
 .project-description, .project-date{
-    text-align: justify;
+    text-align: left;
     font-size: 14px;
     color: rgb(134, 134, 134);
 }
@@ -80,12 +97,39 @@
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    .main-container {
+        padding-bottom: 40px;
+    }
+
+    .heading {
+        display: none;
+    }
+
+    .heading-container {
+        display: none;
+    }
+
     .project-item {
         flex: 1 1 100%;
         max-width: 100%;
+        border-radius: 0px;
+        border: none;
+        border-bottom: solid 1px gray;
+        background-color: #333;
     }
+
+    .project-item:hover {
+        box-shadow: none;
+    }
+
     .project-list {
+        width: 100%;
         justify-content: center;
+        gap: 0;
+    }
+
+    .heading-description {
+        display: none;
     }
 }

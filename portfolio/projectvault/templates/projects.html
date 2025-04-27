@@ -19,16 +19,20 @@
             <p class="heading-description">Browse through the available projects to view their descriptions, technologies used, and other relevant information. </p>
         </div>
         <ul class="project-list">
-            {% for project in projects %}
-                <li class="project-item">
-                    <a class="project-link" href="{% url 'project_detail' slug=project.slug %}">{{ project.title }}</a>
+    {% for project in projects %}
+        <li class="project-item">
+            <a class="project-link" href="{% url 'project_detail' slug=project.slug %}">
+                <div class="project-content">
+                    <h2 class="project-title">{{ project.title }}</h2>
                     <p class="project-description">{{ project.description }}</p>
                     {% if project.image %}
                         <img class="project-image" src="{{ project.image.url }}" alt="{{ project.title }}">
                     {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
+                </div>
+            </a>
+        </li>
+    {% endfor %}
+</ul>
     </section>
     
    

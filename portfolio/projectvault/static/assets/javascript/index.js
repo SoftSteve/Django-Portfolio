@@ -2,7 +2,15 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("menu-toggle").addEventListener("click", function() {
         document.querySelector(".nav-links").classList.toggle("active");
     });
-});
+    const main = document.querySelector('main');
+    
+    if (main) {
+      setTimeout(() => {
+        main.classList.add('loaded');
+      }, 50); 
+    }
+  });
+
 
 // typewriter effect
 document.addEventListener("DOMContentLoaded", () => {

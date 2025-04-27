@@ -40,11 +40,10 @@
 }
 
 .content-text {
-    text-indent: 4ch;
-    line-height: 4ch;
+    line-height: 1.6;
     font-size: 18px;
     font-weight: 200;
-    text-align: justify;
+    text-align: left;
 }
 
 .content-image {
@@ -52,4 +51,13 @@
     margin: 40px auto 0 auto;
     border-radius: 10px;
     width: 250px;
+}
+
+@media (max-width: 768px) {
+    .content-text {
+        text-indent: 0;
+    }
+    .content {
+        width: 90%;
+    }
 }
