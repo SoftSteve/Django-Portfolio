@@ -28,6 +28,7 @@ class ProjectContent(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='content_blocks')
     heading = models.CharField(max_length=255, blank=True)
     text = models.TextField(blank=True)
+    code = models.TextField(blank=True)
     images = models.ImageField(upload_to='static/assets/images', blank=True, null=True)
     order = models.PositiveIntegerField(default=0)
 
@@ -36,3 +37,11 @@ class ProjectContent(models.Model):
     
     def __str__(self):
         return f"Section {self.order} for {self.project.title}"
+    
+class ProjectImage(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_images')
+    image = models.ImageField(upload_to='static/assets/images', blank=True, null=True)
+    caption = models.CharField(max_length=255, blank=True)
+
+    def __str__(self):
+        return self.caption if self.caption else f'Image for {self.project.title}'

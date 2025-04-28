@@ -13,10 +13,11 @@
             <p class="description">
                 Contact me to discuss career opportunities, questions about a project, or to discuss ideas!
             </p>
-            <form class="contact-form" action="/email-form/">
-                <input id="user_name" type="text" name="user_name" required placeholder="Your name*">
+            <form class="contact-form" action="" method="POST">
+                {% csrf_token %}
+                <input id="user_name" type="text" name="name" required placeholder="Your name*">
 
-                <input id="email" type="text", name="email" required placeholder="Email*">
+                <input id="email" type="text" name="email" required placeholder="Email*">
 
                 <textarea type="text" name="message" id="message" required placeholder="Your message*"></textarea>
                 

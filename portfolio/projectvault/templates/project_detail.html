@@ -4,11 +4,20 @@
 {% block head %}
   <link rel="stylesheet" href="{% static 'assets/css/project_detail.css' %}">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+  <script src="{% static 'assets/javascript/project_detail.js' %}"></script>
 {% endblock %}
 
 {% block content %}
     <div class="main-container">
-        <img src="{% static 'assets/images/logo.png' %}" alt="" class="project-logo">
+        {% if project.project_images.all %}
+            <div class="img-container">
+                {% for image in project.project_images.all %}
+                    <img src="{{ image.image.url }}" alt="{{ image.caption }}" class="project-img fade">
+                {% endfor %}
+                    <a onclick="plusSlides(-1)" class="prev">&#10094;</a>
+                    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            </div>
+        {% endif %}
         <h3 class="title">{{ project.title }}</h3>
         <p class="date-created">{{project.created_at}}</p>
         <div class="content">
@@ -19,6 +28,11 @@
                     {% endif %}
                     {% if content.text %}
                         <p class="content-text">{{ content.text }}</p>
+                    {% endif %}
+                    {% if content.code %}
+                        <div class="code-window">
+                            <pre><code class="code">{{ content.code|safe }}</code></pre>
+                        </div>
                     {% endif %}
                     {% if content.image %}
                         <img class="content-image" src="{{ content.image.url }}" alt="{{ content.heading }}" width="200px" height="200px">

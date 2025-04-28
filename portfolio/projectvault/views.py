@@ -1,7 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from .models import AboutSection, Project
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.mail import send_mail
 
 
 def index(request):
@@ -24,5 +25,24 @@ def about(request):
     about = AboutSection.objects.last()
     return render(request,'about.html', {'about': about})
 
+def thank_you(request):
+    return render(request, 'thank_you.html')
+
 def contact(request):
+    if request.method == "POST":
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+
+        full_message = f'message from {name}:\n{email}:\n\n{message}'
+
+        send_mail(
+            subject = 'New message',
+            message = full_message,
+            from_email = 'softsteve.web@gmail.com',
+            recipient_list = ['softsteve.web@gmail.com']
+        )
+
+        return redirect('thank you')
+
     return render(request, 'contact.html')
