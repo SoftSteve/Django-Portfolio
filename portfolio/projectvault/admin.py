@@ -6,7 +6,7 @@ admin.site.register(AboutSection)
 class ProjectContentInline(admin.StackedInline):
     model = ProjectContent
     extra = 1
-    fields = ('heading', 'text', 'image', 'order')
+    fields = ('heading', 'text', 'images', 'order')
     ordering = ('order',)
 
 

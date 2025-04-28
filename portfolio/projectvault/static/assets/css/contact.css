@@ -69,6 +69,7 @@ textarea {
     width: 20%;
     border-width: 0.5px;
     font-weight: 200;
+    cursor: pointer;
 }
 
 
