@@ -27,9 +27,9 @@ load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['']
+ALLOWED_HOSTS = ['softsteve.com', 'www.softsteve.com', 'softSteve.pythonanywhere.com' ]
 
 
 # Application definition
@@ -124,10 +124,14 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS =  [
-    BASE_DIR / "static"
+    BASE_DIR / 'projectvault' / "static"
 ]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from .models import AboutSection, Project
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.mail import send_mail
+import os
+from dotenv import load_dotenv
 
 
 def index(request):
@@ -36,11 +38,14 @@ def contact(request):
 
         full_message = f'message from {name}:\n{email}:\n\n{message}'
 
+        sender_email = os.getenv('EMAIL_HOST_USER')
+        recipient_email = sender_email
+
         send_mail(
             subject = 'New message',
             message = full_message,
-            from_email = 'softsteve.web@gmail.com',
-            recipient_list = ['softsteve.web@gmail.com']
+            from_email = sender_email,
+            recipient_list = [recipient_email]
         )
 
         return redirect('thank you')

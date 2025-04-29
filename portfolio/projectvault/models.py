@@ -12,7 +12,7 @@ class Project(models.Model):
     title = models.CharField(max_length=250)
     slug = models.SlugField(unique=True, blank=True)
     description = models.TextField(blank=True)
-    image = models.ImageField(upload_to='static/assets/images', blank=True, null=True)
+    image = models.ImageField(upload_to='uploads/images', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
@@ -29,7 +29,7 @@ class ProjectContent(models.Model):
     heading = models.CharField(max_length=255, blank=True)
     text = models.TextField(blank=True)
     code = models.TextField(blank=True)
-    images = models.ImageField(upload_to='static/assets/images', blank=True, null=True)
+    images = models.ImageField(upload_to='uploads/images', blank=True, null=True)
     order = models.PositiveIntegerField(default=0)
 
     class Meta:
@@ -40,7 +40,7 @@ class ProjectContent(models.Model):
     
 class ProjectImage(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_images')
-    image = models.ImageField(upload_to='static/assets/images', blank=True, null=True)
+    image = models.ImageField(upload_to='uploads/images', blank=True, null=True)
     caption = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
