@@ -328,6 +328,7 @@ footer {
         padding-bottom: 30px;
         margin-bottom: 2%;
         text-align: start;
+        max-width: 30ch;
     }
     
     .contact-btn {
