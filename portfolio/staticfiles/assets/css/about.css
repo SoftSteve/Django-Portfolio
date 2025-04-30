@@ -1,0 +1,34 @@
+.main-container {
+    box-sizing: border-box;
+    background: #333;
+    color: white;
+    width: 100vw;
+    min-height: 100vh;
+    padding-bottom: 100px;
+    padding: 0;
+}
+
+.about-logo {
+    display: block;
+    margin: 40px auto 0 auto;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
+.about-text {
+    font-size: 18px;
+    line-height: 1.6;
+    font-family: 'Poppins';
+    font-weight: 200;
+    width: 80%;
+    margin: 40px auto 0 auto;
+    padding: 20;
+    text-align: left;
+}
+
+@media (max-width:768px) {
+    .about-text {
+        width: 90%;
+    }
+}

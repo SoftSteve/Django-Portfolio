@@ -1,0 +1,136 @@
+.main-container {
+    font-family: 'Poppins';
+    margin: 0 auto;
+    padding-bottom: 100px;
+    min-height: 100vh; 
+    width: 100vw;
+    background: #333;
+    color: white;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+.heading {
+    font-size: 30px;
+    font-weight: 300;
+    text-align: left;
+}
+
+.heading-description {
+    font-size: 18px;
+    color: gray;
+    text-align: left;
+}
+
+.heading-container {
+    width: 60%;
+    margin: 40px auto 0;
+}
+
+.project-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: left; 
+    list-style: none;
+    width: 60%;
+    padding: 0;
+    margin: 0 auto;
+}
+
+.project-item {
+    flex: 1 1 calc(33.333% - 10px);
+    box-sizing: border-box;
+    background-color: rgba(161, 160, 160, 0.2);
+    border: solid 1px gray;
+    border-radius: 9px;
+    padding: 10px;
+    min-width: 250px;
+    max-width: calc(33.333% - 10px);
+    transition: box-shadow 0.3s ease, border 0.3s ease;
+}
+
+.project-item:hover {
+    box-shadow: 5px 5px 5px black;
+    border: solid 1px white;
+}
+
+.project-link{
+    display: block;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.3 ease;
+}
+
+.project-link:hover {
+    color: #6d878c;
+}
+
+.project-content {
+    height: 100%;
+    width: 100%;
+}
+
+.project-title {
+    font-weight: 200;
+}
+
+.project-description, .project-date{
+    text-align: left;
+    font-size: 14px;
+    color: rgb(134, 134, 134);
+}
+
+.project-image {
+    display: block;
+    margin: 0 auto;
+    width: 250px;
+    height: 150px;
+    border-radius: 10px;
+}
+
+@media (max-width: 900px) {
+    .project-item {
+        flex: 1 1 calc(50% - 10px);
+        max-width: calc(50% - 10px);
+    }
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        padding-bottom: 40px;
+    }
+
+    .heading {
+        display: none;
+    }
+
+    .heading-container {
+        display: none;
+    }
+
+    .project-item {
+        flex: 1 1 100%;
+        max-width: 100%;
+        border-radius: 0px;
+        border: none;
+        border-bottom: solid 1px gray;
+        background-color: #333;
+    }
+
+    .project-item:hover {
+        box-shadow: none;
+    }
+
+    .project-list {
+        width: 100%;
+        justify-content: center;
+        gap: 0;
+    }
+
+    .heading-description {
+        display: none;
+    }
+}
