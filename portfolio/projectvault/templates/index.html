@@ -10,23 +10,23 @@
     <title>Vault</title>
 </head>
 <body>
-   
+
     <header>
         <nav class="nav-container">
             <div class="logo-container">
                 <img src="{% static 'assets/images/logo.png' %}" alt="" class="logo-img">
                 <a href="{% url 'index' %}" class="logo">VAULT</a>
             </div>
-            
+
             <button id="menu-toggle" class="menu-toggle">&#9776;</button>
             <ul class="nav-links">
                 <li><a href="{% url 'projects' %}">Projects</a></li>
                 <li><a href="{% url 'about' %}">About</a></li>
                 <li><a href="{% url 'contact' %}">Contact</a></li>
             </ul>
-        </nav>  
+        </nav>
     </header>
-    
+
     <main>
         <div class="img-container">
             <img src="{% static 'assets/images/wheat-field.png' %}" alt="wheat-field" class="banner">
@@ -36,22 +36,22 @@
             <div id="about-text">
                 <p></p>
             </div>
-        
+
             <div id="hidden-text" style="display: none;">
                 {{ about.body|safe }}
             </div>
         </section>
-        
+
         <div class="btn-container">
             <button onclick="window.location.href='{% url 'projects' %}';" id="contact-btn" class="contact-btn">
-                Start  
+                Start
             </button>
         </div>
-    </main> 
-    
+    </main>
+
     <footer class="foot-container">
         <div class="foot-content">
-            <p>&copy; 2025 ProjectVault. Built with Django.</p>
+            <p>&copy; 2025 Vault. Built with Django.</p>
         </div>
         <ul class="foot-links">
             <li class="foot-item"><a href="/admin/">Admin</a></li>

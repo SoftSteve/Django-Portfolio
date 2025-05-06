@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.http import HttpResponseForbidden
 from .models import AboutSection, Project
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.mail import send_mail
 import os
 from dotenv import load_dotenv
@@ -15,7 +14,7 @@ def start(request):
     return render(request, 'start.html')
 
 def projects(request):
-    projects = Project.objects.all()
+    projects = Project.objects.all().order_by('-created_at')
     return render(request, "projects.html", {'projects': projects})
 
 def project_detail(request, slug):
@@ -32,6 +31,10 @@ def thank_you(request):
 
 def contact(request):
     if request.method == "POST":
+
+        if request.POST.get('middle_name'):
+            return HttpResponseForbidden("Bot detected.")
+
         name = request.POST.get('name')
         email = request.POST.get('email')
         message = request.POST.get('message')
